@@ -19,7 +19,8 @@ help:
 	@echo "	dev-down 	stop the app in development mode with Docker Compose"
 	@echo "	dev-ps  	list development containers"
 	@echo "	dev-logs 	follow development logs"
-	
+	@echo "	test-run 	run the test with Docker Compose"
+
 #Generate project codebase form GitHub using cookiecutter
 init:
 	envsubst <docker/init/cookiecutter.template.yml >docker/init/cookiecutter.yml
@@ -50,4 +51,11 @@ dev-ps:
 
 #Show development logs
 dev-logs:
-	docker-compose -f docker/dev/docker-compose.yml logs -f		
+	docker-compose -f docker/dev/docker-compose.yml logs -f
+
+#Run tests
+test-run:
+	docker-compose -f docker/dev/docker-compose.yml up -d
+	sleep 10
+	docker-compose -f docker/dev/docker-compose.yml exec web flask test
+	docker-compose -f docker/dev/docker-compose.yml down 
